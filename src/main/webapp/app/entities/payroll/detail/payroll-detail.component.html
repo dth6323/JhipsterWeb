@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (payroll(); as payrollRef) {
+      <div>
+        <h2 data-cy="payrollDetailsHeading"><span>Payroll</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ payrollRef.id }}</span>
+          </dd>
+          <dt><span>Salary</span></dt>
+          <dd>
+            <span>{{ payrollRef.salary }}</span>
+          </dd>
+          <dt><span>Work Day</span></dt>
+          <dd>
+            <span>{{ payrollRef.workDay }}</span>
+          </dd>
+          <dt><span>Employee</span></dt>
+          <dd>
+            @if (payroll()!.employee) {
+              <div>
+                <a [routerLink]="['/employee', payroll()!.employee?.id, 'view']">{{ payrollRef.employee?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Wage</span></dt>
+          <dd>
+            @if (payroll()!.wage) {
+              <div>
+                <a [routerLink]="['/wage', payroll()!.wage?.id, 'view']">{{ payrollRef.wage?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Salary Distribute</span></dt>
+          <dd>
+            @if (payroll()!.salaryDistribute) {
+              <div>
+                <a [routerLink]="['/salary-distribute', payroll()!.salaryDistribute?.id, 'view']">{{ payrollRef.salaryDistribute?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/payroll', payrollRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
