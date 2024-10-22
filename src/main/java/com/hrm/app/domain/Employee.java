@@ -52,7 +52,7 @@ public class Employee implements Serializable {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "employees" }, allowSetters = true)
     private Department department;
 

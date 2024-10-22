@@ -45,6 +45,12 @@ public class EmployeeResource {
         this.employeeRepository = employeeRepository;
     }
 
+    //    @Autowired
+    //    private final EmployeeService employeeService;
+    //    public EmployeeResource(EmployeeService employeeService) {
+    //        this.employeeService = employeeService;
+    //    }
+
     /**
      * {@code POST  /employees} : Create a new employee.
      *
@@ -97,17 +103,18 @@ public class EmployeeResource {
             .body(employee);
     }
 
-    /**
-     * {@code PATCH  /employees/:id} : Partial updates given fields of an existing employee, field will ignore if it is null
-     *
-     * @param id the id of the employee to save.
-     * @param employee the employee to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated employee,
-     * or with status {@code 400 (Bad Request)} if the employee is not valid,
-     * or with status {@code 404 (Not Found)} if the employee is not found,
-     * or with status {@code 500 (Internal Server Error)} if the employee couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
+    //
+    //    /**
+    //     * {@code PATCH  /employees/:id} : Partial updates given fields of an existing employee, field will ignore if it is null
+    //     *
+    //     * @param id the id of the employee to save.
+    //     * @param employee the employee to update.
+    //     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated employee,
+    //     * or with status {@code 400 (Bad Request)} if the employee is not valid,
+    //     * or with status {@code 404 (Not Found)} if the employee is not found,
+    //     * or with status {@code 500 (Internal Server Error)} if the employee couldn't be updated.
+    //     * @throws URISyntaxException if the Location URI syntax is incorrect.
+    //     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Employee> partialUpdateEmployee(
         @PathVariable(value = "id", required = false) final Long id,
@@ -157,12 +164,13 @@ public class EmployeeResource {
         );
     }
 
-    /**
-     * {@code GET  /employees} : get all the employees.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of employees in body.
-     */
+    //
+    //    /**
+    //     * {@code GET  /employees} : get all the employees.
+    //     *
+    //     * @param pageable the pagination information.
+    //     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of employees in body.
+    //     */
     @GetMapping("")
     public ResponseEntity<List<Employee>> getAllEmployees(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Employees");
@@ -171,12 +179,17 @@ public class EmployeeResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    //    @GetMapping
+    //    public ResponseEntity<List<EmployeeDTO>> getAllEmployeesWithDepartmentNames() {
+    //        List<EmployeeDTO> employees = employeeService.getall();
+    //
+    //        return ResponseEntity.ok(employees);}
     /**
-     * {@code GET  /employees/:id} : get the "id" employee.
-     *
-     * @param id the id of the employee to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the employee, or with status {@code 404 (Not Found)}.
-     */
+//     * {@code GET  /employees/:id} : get the "id" employee.
+//     *
+//     * @param id the id of the employee to retrieve.
+//     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the employee, or with status {@code 404 (Not Found)}.
+//     */
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Employee : {}", id);
@@ -184,12 +197,13 @@ public class EmployeeResource {
         return ResponseUtil.wrapOrNotFound(employee);
     }
 
-    /**
-     * {@code DELETE  /employees/:id} : delete the "id" employee.
-     *
-     * @param id the id of the employee to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
+    //
+    //    /**
+    //     * {@code DELETE  /employees/:id} : delete the "id" employee.
+    //     *
+    //     * @param id the id of the employee to delete.
+    //     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+    //     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Employee : {}", id);
