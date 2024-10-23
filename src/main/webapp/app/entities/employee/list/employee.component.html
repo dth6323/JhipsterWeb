@@ -112,12 +112,11 @@
               <td>{{ employee.gender }}</td>
               <td>{{ employee.dateOfBirth | formatMediumDate }}</td>
               <td>
-                <!--                @if (employee.department) {-->
-                <!--                  <div>-->
-                <!--                    <a [routerLink]="['/department', employee.department.id, 'view']">{{ employee.department.id }}</a>-->
-                <!--                  </div>-->
-                <!--                }-->
-                {{ employee.department?.departmentName }}
+                @if (employee.department) {
+                  <div>
+                    <a [routerLink]="['/department', employee.department.id, 'view']">{{ employee.department.id }}</a>
+                  </div>
+                }
               </td>
               <td>
                 @if (employee.contract) {

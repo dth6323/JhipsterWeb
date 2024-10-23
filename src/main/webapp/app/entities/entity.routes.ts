@@ -41,6 +41,11 @@ const routes: Routes = [
     data: { pageTitle: 'Wages' },
     loadChildren: () => import('./wage/wage.routes'),
   },
+  {
+    path: 'total-attend-salary',
+    data: { pageTitle: 'TotalAttendSalaries' },
+    loadChildren: () => import('./total-attend-salary/total-attend-salary.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

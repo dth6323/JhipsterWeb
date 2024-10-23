@@ -3,30 +3,30 @@ import dayjs from 'dayjs/esm';
 import { IContract, NewContract } from './contract.model';
 
 export const sampleWithRequiredData: IContract = {
-  id: 9662,
+  id: 17673,
   startDate: dayjs('2024-10-07'),
   endDate: dayjs('2024-10-07'),
-  status: 'embody dress republican',
+  status: 'exonerate going nippy',
 };
 
 export const sampleWithPartialData: IContract = {
-  id: 11424,
+  id: 5023,
   startDate: dayjs('2024-10-07'),
   endDate: dayjs('2024-10-07'),
-  status: 'above healthily',
+  status: 'why',
 };
 
 export const sampleWithFullData: IContract = {
-  id: 29363,
+  id: 17066,
   startDate: dayjs('2024-10-07'),
   endDate: dayjs('2024-10-07'),
-  status: 'hastily hollow',
+  status: 'unhealthy',
 };
 
 export const sampleWithNewData: NewContract = {
-  startDate: dayjs('2024-10-07'),
+  startDate: dayjs('2024-10-08'),
   endDate: dayjs('2024-10-07'),
-  status: 'reel receptor crank',
+  status: 'annex narrate and',
   id: null,
 };
 

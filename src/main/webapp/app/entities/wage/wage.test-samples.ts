@@ -1,30 +1,30 @@
 import { IWage, NewWage } from './wage.model';
 
 export const sampleWithRequiredData: IWage = {
-  id: 28367,
-  coefficients: 17113.24,
-  baseSalary: 24170.73,
-  allowance: 11095.6,
+  id: 27195,
+  coefficients: 11713.06,
+  baseSalary: 26987.92,
+  allowance: 29975.94,
 };
 
 export const sampleWithPartialData: IWage = {
-  id: 3152,
-  coefficients: 12557.58,
-  baseSalary: 22263.32,
-  allowance: 11522.6,
+  id: 22079,
+  coefficients: 24277.78,
+  baseSalary: 15085.5,
+  allowance: 9956.09,
 };
 
 export const sampleWithFullData: IWage = {
-  id: 28426,
-  coefficients: 2529.05,
-  baseSalary: 13618.44,
-  allowance: 13694.03,
+  id: 26073,
+  coefficients: 6487.22,
+  baseSalary: 32422.18,
+  allowance: 21029.82,
 };
 
 export const sampleWithNewData: NewWage = {
-  coefficients: 26123.68,
-  baseSalary: 21280.32,
-  allowance: 31185.63,
+  coefficients: 4675.37,
+  baseSalary: 24664.36,
+  allowance: 9910.27,
   id: null,
 };
 

@@ -5,6 +5,7 @@ import static com.hrm.app.domain.ContractTestSamples.*;
 import static com.hrm.app.domain.DepartmentTestSamples.*;
 import static com.hrm.app.domain.EmployeeTestSamples.*;
 import static com.hrm.app.domain.PayrollTestSamples.*;
+import static com.hrm.app.domain.TotalAttendSalaryTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.hrm.app.web.rest.TestUtil;
@@ -94,5 +95,27 @@ class EmployeeTest {
         employee.setPayrolls(new HashSet<>());
         assertThat(employee.getPayrolls()).doesNotContain(payrollBack);
         assertThat(payrollBack.getEmployee()).isNull();
+    }
+
+    @Test
+    void totalAttendSalaryTest() {
+        Employee employee = getEmployeeRandomSampleGenerator();
+        TotalAttendSalary totalAttendSalaryBack = getTotalAttendSalaryRandomSampleGenerator();
+
+        employee.addTotalAttendSalary(totalAttendSalaryBack);
+        assertThat(employee.getTotalAttendSalaries()).containsOnly(totalAttendSalaryBack);
+        assertThat(totalAttendSalaryBack.getEmployee()).isEqualTo(employee);
+
+        employee.removeTotalAttendSalary(totalAttendSalaryBack);
+        assertThat(employee.getTotalAttendSalaries()).doesNotContain(totalAttendSalaryBack);
+        assertThat(totalAttendSalaryBack.getEmployee()).isNull();
+
+        employee.totalAttendSalaries(new HashSet<>(Set.of(totalAttendSalaryBack)));
+        assertThat(employee.getTotalAttendSalaries()).containsOnly(totalAttendSalaryBack);
+        assertThat(totalAttendSalaryBack.getEmployee()).isEqualTo(employee);
+
+        employee.setTotalAttendSalaries(new HashSet<>());
+        assertThat(employee.getTotalAttendSalaries()).doesNotContain(totalAttendSalaryBack);
+        assertThat(totalAttendSalaryBack.getEmployee()).isNull();
     }
 }

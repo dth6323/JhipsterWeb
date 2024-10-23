@@ -2,11 +2,14 @@ package com.hrm.app.web.rest;
 
 import com.hrm.app.domain.Payroll;
 import com.hrm.app.repository.PayrollRepository;
+import com.hrm.app.service.PayrollService;
+import com.hrm.app.service.dto.EmployeeAttendDTO;
 import com.hrm.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,17 +44,13 @@ public class PayrollResource {
 
     private final PayrollRepository payrollRepository;
 
-    public PayrollResource(PayrollRepository payrollRepository) {
+    private final PayrollService payrollService;
+
+    public PayrollResource(PayrollRepository payrollRepository, PayrollService payrollService) {
         this.payrollRepository = payrollRepository;
+        this.payrollService = payrollService;
     }
 
-    /**
-     * {@code POST  /payrolls} : Create a new payroll.
-     *
-     * @param payroll the payroll to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new payroll, or with status {@code 400 (Bad Request)} if the payroll has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
     public ResponseEntity<Payroll> createPayroll(@Valid @RequestBody Payroll payroll) throws URISyntaxException {
         LOG.debug("REST request to save Payroll : {}", payroll);
@@ -185,5 +184,10 @@ public class PayrollResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/attendance-report")
+    public List<EmployeeAttendDTO> getAttendanceReport(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        return payrollService.getEmployeeSalaryAndAttendance(startDate, endDate);
     }
 }

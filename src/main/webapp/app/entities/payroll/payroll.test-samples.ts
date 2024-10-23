@@ -1,26 +1,26 @@
 import { IPayroll, NewPayroll } from './payroll.model';
 
 export const sampleWithRequiredData: IPayroll = {
-  id: 21084,
-  salary: 11048,
-  workDay: 24158,
+  id: 24327,
+  salary: 17720,
+  workDay: 12291,
 };
 
 export const sampleWithPartialData: IPayroll = {
-  id: 32080,
-  salary: 9506,
-  workDay: 6367,
+  id: 10559,
+  salary: 19897,
+  workDay: 23450,
 };
 
 export const sampleWithFullData: IPayroll = {
-  id: 10103,
-  salary: 21290,
-  workDay: 13958,
+  id: 6383,
+  salary: 31015,
+  workDay: 14874,
 };
 
 export const sampleWithNewData: NewPayroll = {
-  salary: 32041,
-  workDay: 7191,
+  salary: 9559,
+  workDay: 23240,
   id: null,
 };
 

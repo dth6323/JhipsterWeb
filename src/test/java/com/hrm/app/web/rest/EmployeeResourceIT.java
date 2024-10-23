@@ -397,6 +397,8 @@ class EmployeeResourceIT {
         Employee partialUpdatedEmployee = new Employee();
         partialUpdatedEmployee.setId(employee.getId());
 
+        partialUpdatedEmployee.phone(UPDATED_PHONE).email(UPDATED_EMAIL);
+
         restEmployeeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedEmployee.getId())

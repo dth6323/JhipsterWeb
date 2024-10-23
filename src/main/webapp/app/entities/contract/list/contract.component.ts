@@ -104,6 +104,7 @@ export class ContractComponent implements OnInit {
   protected fillComponentAttributesFromResponseBody(data: IContract[] | null): IContract[] {
     return data ?? [];
   }
+
   protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
     this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
   }

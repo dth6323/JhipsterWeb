@@ -52,7 +52,7 @@ public class Employee implements Serializable {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "employees" }, allowSetters = true)
     private Department department;
 
@@ -67,6 +67,10 @@ public class Employee implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     @JsonIgnoreProperties(value = { "employee", "wage", "salaryDistribute" }, allowSetters = true)
     private Set<Payroll> payrolls = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+    @JsonIgnoreProperties(value = { "employee" }, allowSetters = true)
+    private Set<TotalAttendSalary> totalAttendSalaries = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -246,6 +250,37 @@ public class Employee implements Serializable {
     public Employee removePayroll(Payroll payroll) {
         this.payrolls.remove(payroll);
         payroll.setEmployee(null);
+        return this;
+    }
+
+    public Set<TotalAttendSalary> getTotalAttendSalaries() {
+        return this.totalAttendSalaries;
+    }
+
+    public void setTotalAttendSalaries(Set<TotalAttendSalary> totalAttendSalaries) {
+        if (this.totalAttendSalaries != null) {
+            this.totalAttendSalaries.forEach(i -> i.setEmployee(null));
+        }
+        if (totalAttendSalaries != null) {
+            totalAttendSalaries.forEach(i -> i.setEmployee(this));
+        }
+        this.totalAttendSalaries = totalAttendSalaries;
+    }
+
+    public Employee totalAttendSalaries(Set<TotalAttendSalary> totalAttendSalaries) {
+        this.setTotalAttendSalaries(totalAttendSalaries);
+        return this;
+    }
+
+    public Employee addTotalAttendSalary(TotalAttendSalary totalAttendSalary) {
+        this.totalAttendSalaries.add(totalAttendSalary);
+        totalAttendSalary.setEmployee(this);
+        return this;
+    }
+
+    public Employee removeTotalAttendSalary(TotalAttendSalary totalAttendSalary) {
+        this.totalAttendSalaries.remove(totalAttendSalary);
+        totalAttendSalary.setEmployee(null);
         return this;
     }
 

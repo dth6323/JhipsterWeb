@@ -312,7 +312,7 @@ class WageResourceIT {
         Wage partialUpdatedWage = new Wage();
         partialUpdatedWage.setId(wage.getId());
 
-        partialUpdatedWage.baseSalary(UPDATED_BASE_SALARY);
+        partialUpdatedWage.coefficients(UPDATED_COEFFICIENTS).baseSalary(UPDATED_BASE_SALARY).allowance(UPDATED_ALLOWANCE);
 
         restWageMockMvc
             .perform(
