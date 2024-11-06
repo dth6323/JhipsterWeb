@@ -12,15 +12,13 @@ import { FormsModule } from '@angular/forms';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
-import { IPayroll } from '../payroll.model';
-import { EntityArrayResponseType, PayrollService } from '../service/payroll.service';
-import { PayrollDeleteDialogComponent } from '../delete/payroll-delete-dialog.component';
-import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.directive';
-
+import { Ias } from '../as.model';
+import { AsService, EntityArrayResponseType } from '../service/as.service';
+import { formatDate } from '@angular/common';
 @Component({
   standalone: true,
-  selector: 'jhi-payroll',
-  templateUrl: './payroll.component.html',
+  selector: 'jhi-as',
+  templateUrl: './as.component.html',
   imports: [
     RouterModule,
     FormsModule,
@@ -31,12 +29,11 @@ import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.dir
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ItemCountComponent,
-    HasAnyAuthorityDirective,
   ],
 })
-export class PayrollComponent implements OnInit {
+export class AsComponent implements OnInit {
   subscription: Subscription | null = null;
-  payrolls?: IPayroll[];
+  as1?: Ias[];
   isLoading = false;
 
   sortState = sortStateSignal({});
@@ -45,32 +42,24 @@ export class PayrollComponent implements OnInit {
   totalItems = 0;
   page = 1;
 
+  startDate: Date = new Date('1000-01-01');
+  endDate: Date = new Date('3000-1-1');
+  formattedStartDate: string | null = null;
+  formattedEndDate: string | null = null;
   public router = inject(Router);
-  protected payrollService = inject(PayrollService);
+  protected asService = inject(AsService);
   protected activatedRoute = inject(ActivatedRoute);
   protected sortService = inject(SortService);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
 
-  trackId = (item: IPayroll): number => this.payrollService.getPayrollIdentifier(item);
+  trackId = (item: Ias): number => this.asService.getAsIdentifier(item);
 
   ngOnInit(): void {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.load()),
-      )
-      .subscribe();
-  }
-
-  delete(payroll: IPayroll): void {
-    const modalRef = this.modalService.open(PayrollDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.payroll = payroll;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        tap(() => this.load()),
+        tap(() => this.loadSalaries()),
       )
       .subscribe();
   }
@@ -81,6 +70,31 @@ export class PayrollComponent implements OnInit {
         this.onResponseSuccess(res);
       },
     });
+  }
+
+  loadSalaries(): void {
+    this.isLoading = true;
+    this.formattedStartDate = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US');
+    this.formattedEndDate = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US');
+
+    const params: any = {
+      ['startDate']: this.formattedStartDate,
+      ['endDate']: this.formattedEndDate,
+    };
+    this.asService.query(params).subscribe({
+      next: response => {
+        this.as1 = response.body ?? [];
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  onDateChange(): void {
+    // Optional: Automatically refresh list when date is changed.
+    this.loadSalaries();
   }
 
   navigateToWithComponentValues(event: SortState): void {
@@ -100,10 +114,10 @@ export class PayrollComponent implements OnInit {
   protected onResponseSuccess(response: EntityArrayResponseType): void {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.payrolls = dataFromBody;
+    this.as1 = dataFromBody;
   }
 
-  protected fillComponentAttributesFromResponseBody(data: IPayroll[] | null): IPayroll[] {
+  protected fillComponentAttributesFromResponseBody(data: Ias[] | null): Ias[] {
     return data ?? [];
   }
 
@@ -121,7 +135,7 @@ export class PayrollComponent implements OnInit {
       size: this.itemsPerPage,
       sort: this.sortService.buildSortParam(this.sortState()),
     };
-    return this.payrollService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    return this.asService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
   protected handleNavigation(page: number, sortState: SortState): void {

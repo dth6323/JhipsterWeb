@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (totalAttendSalary(); as totalAttendSalaryRef) {
+      <div>
+        <h2 data-cy="totalAttendSalaryDetailsHeading"><span>Total Attend Salary</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ totalAttendSalaryRef.id }}</span>
+          </dd>
+          <dt><span>Total Attend</span></dt>
+          <dd>
+            <span>{{ totalAttendSalaryRef.totalAttend }}</span>
+          </dd>
+          <dt><span>Total Salary</span></dt>
+          <dd>
+            <span>{{ totalAttendSalaryRef.totalSalary }}</span>
+          </dd>
+          <dt><span>Employee</span></dt>
+          <dd>
+            @if (totalAttendSalary()!.employee) {
+              <div>
+                <a [routerLink]="['/employee', totalAttendSalary()!.employee?.id, 'view']">{{ totalAttendSalaryRef.employee?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/total-attend-salary', totalAttendSalaryRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

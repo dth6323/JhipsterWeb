@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,7 +188,13 @@ public class PayrollResource {
     }
 
     @GetMapping("/attendance-report")
-    public List<EmployeeAttendDTO> getAttendanceReport(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+    public List<EmployeeAttendDTO> getAttendanceReport(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        if (startDate == null || endDate == null) {
+            return null;
+        }
         return payrollService.getEmployeeSalaryAndAttendance(startDate, endDate);
     }
 }

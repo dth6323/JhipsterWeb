@@ -12,6 +12,11 @@ const routes: Routes = [
     loadChildren: () => import('./attendance/attendance.routes'),
   },
   {
+    path: 'as',
+    data: { pageTitle: 'As' },
+    loadChildren: () => import('./attendAndSalary/as.routes'),
+  },
+  {
     path: 'contract',
     data: { pageTitle: 'Contracts' },
     loadChildren: () => import('./contract/contract.routes'),

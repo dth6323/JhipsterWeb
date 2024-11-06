@@ -1,0 +1,115 @@
+<div>
+  <h2 id="page-heading" data-cy="TotalAttendSalaryHeading">
+    <span>Total Attend Salaries</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-total-attend-salary"
+        [routerLink]="['/total-attend-salary/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Create a new Total Attend Salary</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (totalAttendSalaries?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Total Attend Salaries found</span>
+    </div>
+  }
+
+  @if (totalAttendSalaries && totalAttendSalaries.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalAttend">
+              <div class="d-flex">
+                <span>Total Attend</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalSalary">
+              <div class="d-flex">
+                <span>Total Salary</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="employee.id">
+              <div class="d-flex">
+                <span>Employee</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (totalAttendSalary of totalAttendSalaries; track trackId(totalAttendSalary)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/total-attend-salary', totalAttendSalary.id, 'view']">{{ totalAttendSalary.id }}</a>
+              </td>
+              <td>{{ totalAttendSalary.totalAttend }}</td>
+              <td>{{ totalAttendSalary.totalSalary }}</td>
+              <td>
+                @if (totalAttendSalary.employee) {
+                  <div>
+                    <a [routerLink]="['/employee', totalAttendSalary.employee.id, 'view']">{{ totalAttendSalary.employee.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/total-attend-salary', totalAttendSalary.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/total-attend-salary', totalAttendSalary.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(totalAttendSalary)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

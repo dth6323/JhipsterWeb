@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20241022072453"
+  },
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "totalAttend",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "totalSalary",
+      "fieldType": "Integer"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "TotalAttendSalary",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "totalAttendSalary",
+      "relationshipName": "employee",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

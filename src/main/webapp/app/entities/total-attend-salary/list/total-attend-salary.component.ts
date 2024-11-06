@@ -1,5 +1,4 @@
 import { Component, NgZone, OnInit, inject } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,20 +6,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
-import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
-
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
-import { IPayroll } from '../payroll.model';
-import { EntityArrayResponseType, PayrollService } from '../service/payroll.service';
-import { PayrollDeleteDialogComponent } from '../delete/payroll-delete-dialog.component';
-import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.directive';
+import { ITotalAttendSalary } from '../total-attend-salary.model';
+import { EntityArrayResponseType, TotalAttendSalaryService } from '../service/total-attend-salary.service';
+import { TotalAttendSalaryDeleteDialogComponent } from '../delete/total-attend-salary-delete-dialog.component';
 
 @Component({
   standalone: true,
-  selector: 'jhi-payroll',
-  templateUrl: './payroll.component.html',
+  selector: 'jhi-total-attend-salary',
+  templateUrl: './total-attend-salary.component.html',
   imports: [
     RouterModule,
     FormsModule,
@@ -30,42 +25,40 @@ import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.dir
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
-    ItemCountComponent,
-    HasAnyAuthorityDirective,
   ],
 })
-export class PayrollComponent implements OnInit {
+export class TotalAttendSalaryComponent implements OnInit {
   subscription: Subscription | null = null;
-  payrolls?: IPayroll[];
+  totalAttendSalaries?: ITotalAttendSalary[];
   isLoading = false;
 
   sortState = sortStateSignal({});
 
-  itemsPerPage = ITEMS_PER_PAGE;
-  totalItems = 0;
-  page = 1;
-
   public router = inject(Router);
-  protected payrollService = inject(PayrollService);
+  protected totalAttendSalaryService = inject(TotalAttendSalaryService);
   protected activatedRoute = inject(ActivatedRoute);
   protected sortService = inject(SortService);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
 
-  trackId = (item: IPayroll): number => this.payrollService.getPayrollIdentifier(item);
+  trackId = (item: ITotalAttendSalary): number => this.totalAttendSalaryService.getTotalAttendSalaryIdentifier(item);
 
   ngOnInit(): void {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.load()),
+        tap(() => {
+          if (!this.totalAttendSalaries || this.totalAttendSalaries.length === 0) {
+            this.load();
+          }
+        }),
       )
       .subscribe();
   }
 
-  delete(payroll: IPayroll): void {
-    const modalRef = this.modalService.open(PayrollDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.payroll = payroll;
+  delete(totalAttendSalary: ITotalAttendSalary): void {
+    const modalRef = this.modalService.open(TotalAttendSalaryDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.totalAttendSalary = totalAttendSalary;
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed
       .pipe(
@@ -84,50 +77,37 @@ export class PayrollComponent implements OnInit {
   }
 
   navigateToWithComponentValues(event: SortState): void {
-    this.handleNavigation(this.page, event);
-  }
-
-  navigateToPage(page: number): void {
-    this.handleNavigation(page, this.sortState());
+    this.handleNavigation(event);
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-    const page = params.get(PAGE_HEADER);
-    this.page = +(page ?? 1);
     this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.payrolls = dataFromBody;
+    this.totalAttendSalaries = this.refineData(dataFromBody);
   }
 
-  protected fillComponentAttributesFromResponseBody(data: IPayroll[] | null): IPayroll[] {
+  protected refineData(data: ITotalAttendSalary[]): ITotalAttendSalary[] {
+    const { predicate, order } = this.sortState();
+    return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: ITotalAttendSalary[] | null): ITotalAttendSalary[] {
     return data ?? [];
   }
 
-  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
-    this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
-  }
-
   protected queryBackend(): Observable<EntityArrayResponseType> {
-    const { page } = this;
-
     this.isLoading = true;
-    const pageToLoad: number = page;
     const queryObject: any = {
-      page: pageToLoad - 1,
-      size: this.itemsPerPage,
       sort: this.sortService.buildSortParam(this.sortState()),
     };
-    return this.payrollService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    return this.totalAttendSalaryService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(page: number, sortState: SortState): void {
+  protected handleNavigation(sortState: SortState): void {
     const queryParamsObj = {
-      page,
-      size: this.itemsPerPage,
       sort: this.sortService.buildSortParam(sortState),
     };
 

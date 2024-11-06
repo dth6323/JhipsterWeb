@@ -25,4 +25,16 @@ public interface PayrollRepository extends JpaRepository<Payroll, Long> {
         """
     )
     List<Object[]> getEmployeeSalaryAndAttendance(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query(
+        """
+            SELECT e.id, e.name,w.baseSalary, COUNT(a.id) AS attendanceDays
+                FROM Attendance a
+                JOIN Employee e ON a.employee.id = e.id
+                JOIN Payroll p ON e.id = p.employee.id
+                JOIN Wage w ON p.wage.id = w.id
+                GROUP BY e.id, e.name,w.baseSalary
+        """
+    )
+    List<Object[]> getall();
 }
