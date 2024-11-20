@@ -89,6 +89,12 @@ management:
     tags:
       application: ${spring.application.name}
 
+minio:
+  url: http://localhost:9003
+  accessKey: vSQZe8I97omGsgBUau3v
+  secretKey: OtV1LYhUiUi7ABXtEF3RXE3p2avwzA9t5XlywBYA
+  bucket: phatnguoi
+
 spring:
   application:
     name: jhipsterWeb
@@ -174,7 +180,6 @@ server:
     session:
       cookie:
         http-only: true
-
 springdoc:
   show-actuator: true
 

@@ -2,6 +2,7 @@ package com.hrm.app.web.rest;
 
 import com.hrm.app.domain.Payroll;
 import com.hrm.app.repository.PayrollRepository;
+import com.hrm.app.service.MinioService;
 import com.hrm.app.service.PayrollService;
 import com.hrm.app.service.dto.EmployeeAttendDTO;
 import com.hrm.app.web.rest.errors.BadRequestAlertException;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -42,6 +45,9 @@ public class PayrollResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+
+    @Autowired
+    private MinioService minioService;
 
     private final PayrollRepository payrollRepository;
 
@@ -196,5 +202,15 @@ public class PayrollResource {
             return null;
         }
         return payrollService.getEmployeeSalaryAndAttendance(startDate, endDate);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            String message = minioService.uploadFile(file.getOriginalFilename(), file.getInputStream(), file.getContentType());
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
+        }
     }
 }
