@@ -1,0 +1,57 @@
+entity Department {
+  DepartmentName String required maxlength(50),
+  Address String required maxlength(50)
+}
+
+entity Wage {
+  Coefficients Float required,
+  BaseSalary Float required,
+  Allowance Float required
+}
+
+entity SalaryDistribute {
+  StartDate LocalDate required,
+  EndDate LocalDate required,
+  WorkDay Integer required,
+  TypeOfSalary String required maxlength(30)
+}
+
+entity Employee {
+  Name String required maxlength(100),
+  Phone String required maxlength(20),
+  Email String required maxlength(255),
+  Address String required maxlength(255),
+  Gender Integer required,
+  DateOfBirth LocalDate required
+}
+
+entity Contract {
+  StartDate LocalDate required,
+  EndDate LocalDate required,
+  Status String required maxlength(50)
+}
+
+entity Attendance {
+  DateOfwork LocalDate required,
+  CheckInTime Instant required,
+  CheckOutTime Instant required,
+  WorkHour Float required
+}
+
+entity Payroll {
+  Salary Integer required,
+  WorkDay Integer required
+}
+
+relationship ManyToOne {
+  Employee to Department,
+  Employee to Contract,
+  Attendance to Employee,
+  Payroll to Employee,
+  Payroll to Wage,
+  Payroll to SalaryDistribute
+}
+
+
+// Sử dụng paginate cho từng entity
+paginate Department, Wage, SalaryDistribute, Employee, Contract, Attendance, Payroll with pagination

@@ -1,0 +1,96 @@
+<div>
+  <h2 id="page-heading" data-cy="AsHeading">
+    <span>As</span>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="startDate">Ngày bắt đầu:</label>
+      <input
+        id="startDate"
+        class="form-control"
+        ngbDatepicker
+        #startDatePicker="ngbDatepicker"
+        [(ngModel)]="startDate"
+        placeholder="yyyy-mm-dd"
+      />
+      <button class="btn btn-outline-secondary mt-2" (click)="startDatePicker.toggle()">📅</button>
+    </div>
+
+    <div class="col-md-4">
+      <label for="endDate">Ngày kết thúc:</label>
+      <input
+        id="endDate"
+        class="form-control"
+        ngbDatepicker
+        #endDatePicker="ngbDatepicker"
+        [(ngModel)]="endDate"
+        placeholder="yyyy-mm-dd"
+      />
+      <button class="btn btn-outline-secondary mt-2" (click)="endDatePicker.toggle()">📅</button>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn btn-primary" (click)="loadSalaries()">Tìm kiếm</button>
+    </div>
+  </div>
+  @if (as1 && as1.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr>
+            <th scope="col">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex">
+                <span>Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex">
+                <span>Base</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex">
+                <span>Attend</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex">
+                <span>Salary</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (as2 of as1; track trackId(as2)) {
+            <tr data-cy="entityTable">
+              <td>{{ as2.id }}</td>
+              <td>{{ as2.name }}</td>
+              <td>{{ as2.baseSalary }}</td>
+              <td>{{ as2.totalSalary }}</td>
+              <td>{{ as2.attendanceDays }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
