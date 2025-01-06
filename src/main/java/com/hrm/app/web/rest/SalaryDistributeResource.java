@@ -1,6 +1,12 @@
 package com.hrm.app.web.rest;
 
+import com.hrm.app.domain.Attendance;
+import com.hrm.app.domain.Payroll;
 import com.hrm.app.domain.SalaryDistribute;
+import com.hrm.app.domain.Wage;
+import com.hrm.app.repository.AttendanceRepository;
+import com.hrm.app.repository.EmployeeRepository;
+import com.hrm.app.repository.PayrollRepository;
 import com.hrm.app.repository.SalaryDistributeRepository;
 import com.hrm.app.service.dto.SalaryDistributeDTO;
 import com.hrm.app.service.mapper.SalaryDistributeMapper;
@@ -9,9 +15,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
+
+import org.hibernate.mapping.Any;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,19 +50,80 @@ public class SalaryDistributeResource {
 
     private final SalaryDistributeRepository salaryDistributeRepository;
     private final SalaryDistributeMapper salaryDistributeMapper;
+    private final AttendanceRepository attendanceRepository;
+    private final PayrollRepository payrollRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public SalaryDistributeResource(SalaryDistributeRepository salaryDistributeRepository, SalaryDistributeMapper salaryDistributeMapper) {
+    public SalaryDistributeResource(SalaryDistributeRepository salaryDistributeRepository, SalaryDistributeMapper salaryDistributeMapper, AttendanceRepository attendanceRepository, PayrollRepository payrollRepository, EmployeeRepository employeeRepository) {
         this.salaryDistributeRepository = salaryDistributeRepository;
         this.salaryDistributeMapper = salaryDistributeMapper;
+        this.attendanceRepository = attendanceRepository;
+        this.payrollRepository = payrollRepository;
+        this.employeeRepository = employeeRepository;
     }
 
-    /**
-     * {@code POST  /salary-distributes} : Create a new salaryDistribute.
-     *
-     * @param salaryDistribute the salaryDistribute to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new salaryDistribute, or with status {@code 400 (Bad Request)} if the salaryDistribute has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
+    @PostMapping("/pay")
+    public ResponseEntity<?> calculate(
+        @RequestParam("startDate") LocalDate startDate,
+        @RequestParam("endDate") LocalDate endDate,
+        @RequestParam("sdid") String id) {
+        Long ss = Long.parseLong(id);
+        try {
+            List<Attendance> att = this.attendanceRepository.findByDateOfworkBetween(startDate,endDate);
+            Map<Long, Integer> map = new HashMap<>();
+            List<Payroll> payrolls = new ArrayList<>();
+
+            for (Attendance attendance : att) {
+                Long employeeId = attendance.getEmployee().getId();
+                map.put(employeeId, map.getOrDefault(employeeId, 0) + 1);
+            }
+
+            for (Map.Entry<Long, Integer> entry : map.entrySet()) {
+                Payroll payroll = new Payroll();
+                Wage wage = new Wage();
+                wage.setId(1L);
+                payroll.setWorkDay(entry.getValue());
+                payroll.setSalary(1);
+                payroll.setWage(wage);
+                payroll.setEmployee(employeeRepository.getOne(entry.getKey()));
+                payroll.setSalaryDistribute(salaryDistributeRepository.getOne(ss));
+                payrolls.add(payroll);
+                payrollRepository.save(payroll);
+            }
+
+            // Trả về danh sách payroll đã tạo
+            return ResponseEntity.ok(payrolls);
+
+        } catch (NumberFormatException ex) {
+            // Xử lý ngoại lệ nếu `id` không hợp lệ
+            return ResponseEntity.badRequest()
+                .body("Invalid 'sdid' parameter. It must be a valid number.");
+        }
+    }
+
+
+//    @GetMapping("/t2pay")
+//    public List<Attendance> t2calculate(@RequestParam("date") LocalDate date) {
+//        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
+//        Map<Long, Integer> map1 = new HashMap<>();
+//        for (Attendance attendance : att) {
+//            Long employeeId = attendance.getEmployee().getId();
+//
+//            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
+//        }
+//        return att;
+//    }
+//    @GetMapping("/tpay")
+//    public Map<Long, Integer> tcalculate(@RequestParam("date") LocalDate date) {
+//        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
+//        Map<Long, Integer> map1 = new HashMap<>();
+//        for (Attendance attendance : att) {
+//            Long employeeId = attendance.getEmployee().getId();
+//
+//            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
+//        }
+//        return map1;
+//    }
     @PostMapping("")
     public ResponseEntity<SalaryDistribute> createSalaryDistribute(@Valid @RequestBody SalaryDistribute salaryDistribute)
         throws URISyntaxException {

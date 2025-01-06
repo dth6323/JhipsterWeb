@@ -45,13 +45,6 @@ public class AttendanceResource {
         this.attendanceRepository = attendanceRepository;
     }
 
-    /**
-     * {@code POST  /attendances} : Create a new attendance.
-     *
-     * @param attendance the attendance to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new attendance, or with status {@code 400 (Bad Request)} if the attendance has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
     public ResponseEntity<Attendance> createAttendance(@Valid @RequestBody Attendance attendance) throws URISyntaxException {
         LOG.debug("REST request to save Attendance : {}", attendance);
@@ -64,16 +57,6 @@ public class AttendanceResource {
             .body(attendance);
     }
 
-    /**
-     * {@code PUT  /attendances/:id} : Updates an existing attendance.
-     *
-     * @param id the id of the attendance to save.
-     * @param attendance the attendance to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attendance,
-     * or with status {@code 400 (Bad Request)} if the attendance is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the attendance couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Attendance> updateAttendance(
         @PathVariable(value = "id", required = false) final Long id,
@@ -97,17 +80,7 @@ public class AttendanceResource {
             .body(attendance);
     }
 
-    /**
-     * {@code PATCH  /attendances/:id} : Partial updates given fields of an existing attendance, field will ignore if it is null
-     *
-     * @param id the id of the attendance to save.
-     * @param attendance the attendance to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attendance,
-     * or with status {@code 400 (Bad Request)} if the attendance is not valid,
-     * or with status {@code 404 (Not Found)} if the attendance is not found,
-     * or with status {@code 500 (Internal Server Error)} if the attendance couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
+
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Attendance> partialUpdateAttendance(
         @PathVariable(value = "id", required = false) final Long id,
@@ -151,12 +124,7 @@ public class AttendanceResource {
         );
     }
 
-    /**
-     * {@code GET  /attendances} : get all the attendances.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attendances in body.
-     */
+
     @GetMapping("")
     public ResponseEntity<List<Attendance>> getAllAttendances(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Attendances");
@@ -165,12 +133,7 @@ public class AttendanceResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    /**
-     * {@code GET  /attendances/:id} : get the "id" attendance.
-     *
-     * @param id the id of the attendance to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the attendance, or with status {@code 404 (Not Found)}.
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<Attendance> getAttendance(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Attendance : {}", id);
@@ -178,12 +141,6 @@ public class AttendanceResource {
         return ResponseUtil.wrapOrNotFound(attendance);
     }
 
-    /**
-     * {@code DELETE  /attendances/:id} : delete the "id" attendance.
-     *
-     * @param id the id of the attendance to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAttendance(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Attendance : {}", id);

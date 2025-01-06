@@ -10,7 +10,8 @@ import { EntityArrayResponseType } from '../../payroll/service/payroll.service';
 import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.directive';
 import { SortByDirective, SortDirective } from '../../../shared/sort';
 import { SalaryDistribute } from '../employee-detail.model';
-import { PayrollUpdateComponent } from '../../payroll/update/payroll-update.component';
+import { PayrollService } from '../../payroll/service/payroll.service';
+import { NewPayroll } from '../../payroll/payroll.model';
 @Component({
   standalone: true,
   selector: 'jhi-salary-distribute-detail',
@@ -29,12 +30,21 @@ import { PayrollUpdateComponent } from '../../payroll/update/payroll-update.comp
 export class SalaryDistributeDetailComponent implements OnInit {
   salaryDistribute = input<ISalaryDistribute | null>(null);
   id: string | null = null;
+  protected payroll: NewPayroll | null = null;
   protected route: ActivatedRoute = inject(ActivatedRoute);
   protected employeeDetail?: SalaryDistribute[] = [];
   protected salaryDistributeService = inject(SalaryDistributeService);
+  protected payrollService = inject(PayrollService);
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.showemployee();
+  }
+  caculate(): void {
+    const value = this.salaryDistribute();
+    if (value) {
+      // eslint-disable-next-line no-console
+      console.log(value.id);
+    }
   }
   showemployee(): any {
     if (this.id != null)

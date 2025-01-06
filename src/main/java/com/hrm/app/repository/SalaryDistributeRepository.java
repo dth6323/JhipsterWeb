@@ -44,4 +44,8 @@ public interface SalaryDistributeRepository extends JpaRepository<SalaryDistribu
         nativeQuery = true
     )
     List<Object[]> findDetails(@Param("id") String id);
+//    @Query(value = """
+//
+//""", nativeQuery = true)
+//    List<Object[]> caculateSalary(@Param("id") String id);
 }

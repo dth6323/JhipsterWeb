@@ -17,7 +17,7 @@ export class DepartmentService {
   protected http = inject(HttpClient);
   protected applicationConfigService = inject(ApplicationConfigService);
 
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payrolls/attendance-report');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/departments');
 
   create(department: NewDepartment): Observable<EntityResponseType> {
     return this.http.post<IDepartment>(this.resourceUrl, department, { observe: 'response' });

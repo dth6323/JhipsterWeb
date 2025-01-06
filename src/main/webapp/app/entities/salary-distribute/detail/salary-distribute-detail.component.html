@@ -45,61 +45,64 @@
       }
     </div>
   </div>
-  <div>
-    <div class="pt-5">
-      @if (employeeDetail && employeeDetail.length > 0) {
-        <div class="" id="entities">
-          <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-            <tr>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>Name</span>
-                </div>
-              </th>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>ToTal Salary</span>
-                </div>
-              </th>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>Total Work Day</span>
-                </div>
-              </th>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>Wage Allowance</span>
-                </div>
-              </th>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>Wage BaseSalary</span>
-                </div>
-              </th>
-              <th scope="col" class="px-3 py-2">
-                <div class="d-flex">
-                  <span>Wage Coefficients</span>
-                </div>
-              </th>
-              <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-              @for (item of employeeDetail; track employeeDetail) {
-                <tr data-cy="entityTable" class="">
-                  <td class="px-3 py-2">{{ item.employeeName }}</td>
-                  <td class="px-3 py-2">{{ item.totalSalary }}</td>
-                  <td class="px-3 py-2">{{ item.totalWorkDays }}</td>
-                  <td class="px-3 py-2">{{ item.wageAllowance }}</td>
-                  <td class="px-3 py-2">{{ item.wageBaseSalary }}</td>
-                  <td class="px-3 py-2">{{ item.wageCoefficients }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
+  <div class="mt-4">
+    <button class="btn btn-success" (click)="caculate()">Caculate</button>
+    <div>
+      <div class="pt-5">
+        @if (employeeDetail && employeeDetail.length > 0) {
+          <div class="" id="entities">
+            <table class="table table-striped" aria-describedby="page-heading">
+              <thead>
+              <tr>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>Name</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>ToTal Salary</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>Total Work Day</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>Wage Allowance</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>Wage BaseSalary</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-3 py-2">
+                  <div class="d-flex">
+                    <span>Wage Coefficients</span>
+                  </div>
+                </th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (item of employeeDetail; track employeeDetail) {
+                  <tr data-cy="entityTable" class="">
+                    <td class="px-3 py-2">{{ item.employeeName }}</td>
+                    <td class="px-3 py-2">{{ item.totalSalary }}</td>
+                    <td class="px-3 py-2">{{ item.totalWorkDays }}</td>
+                    <td class="px-3 py-2">{{ item.wageAllowance }}</td>
+                    <td class="px-3 py-2">{{ item.wageBaseSalary }}</td>
+                    <td class="px-3 py-2">{{ item.wageCoefficients }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </div>
