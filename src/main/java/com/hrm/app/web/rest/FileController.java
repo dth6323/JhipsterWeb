@@ -1,6 +1,9 @@
 package com.hrm.app.web.rest;
 
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.hrm.app.domain.PdfDocument;
 import com.hrm.app.service.FileService;
+import com.hrm.app.service.dto.SearchResultDTO;
 import io.minio.ListObjectsArgs;
 import io.minio.Result;
 import io.minio.messages.Item;
@@ -48,12 +51,15 @@ public class FileController {
     public ResponseEntity<?> getFile(@RequestParam("filename") String fileName) {
         try {
             byte[] fileBytes = fileService.getFile(fileName);
-            return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM) // Content-Type cho file nói chung
-                .body(fileBytes);
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(fileBytes);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(@RequestParam("keyword") String keyword) throws IOException {
+        return ResponseEntity.ok(fileService.searchDocuments(keyword));
     }
 
     @GetMapping("/search-by-content")
@@ -64,6 +70,16 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new ArrayList<>());
+        }
+    }
+
+    @GetMapping("/searchWithHighlight")
+    public ResponseEntity<List<SearchResultDTO>> searchFileWithHighlight(@RequestParam("keyword") String keyword) {
+        try {
+            List<SearchResultDTO> results = fileService.searchDocuments(keyword);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
