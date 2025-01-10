@@ -47,6 +47,11 @@ const routes: Routes = [
     loadChildren: () => import('./wage/wage.routes'),
   },
   {
+    path: 'filemana',
+    data: { pageTitle: 'Filemana' },
+    loadChildren: () => import('./filemanagement/filemana.routes'),
+  },
+  {
     path: 'total-attend-salary',
     data: { pageTitle: 'TotalAttendSalaries' },
     loadChildren: () => import('./total-attend-salary/total-attend-salary.routes'),

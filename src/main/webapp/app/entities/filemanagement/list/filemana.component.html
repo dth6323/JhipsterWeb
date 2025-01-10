@@ -1,0 +1,19 @@
+<form class="input-group mb-3">
+  <span class="input-group-text">Key word</span>
+  <input type="text" name="search" class="form-control" placeholder="keyword" [(ngModel)]="keyword" />
+  <button (click)="searchFile()">Search</button>
+</form>
+<div>
+  <h2>Upload File</h2>
+  <input type="file" (change)="onFileSelected($event)" />
+  <button (click)="uploadFile()" [disabled]="isLoading">Upload</button>
+</div>
+@if (files && files.length > 0) {
+  <ul>
+    @for (file of files; track file) {
+      <li>
+        {{ file }}
+      </li>
+    }
+  </ul>
+}

@@ -88,7 +88,6 @@ management:
           enabled: true
     tags:
       application: ${spring.application.name}
-
 minio:
   url: http://localhost:9003
   accessKey: vSQZe8I97omGsgBUau3v
@@ -114,12 +113,24 @@ spring:
         - api-docs
         # Uncomment to activate TLS for the dev profile
         #- tls
+  logging:
+    level:
+      org.springframework.data.elasticsearch.client.WIRE: DEBUG
+      org.elasticsearch.client: DEBUG
   jmx:
     enabled: false
+  elasticsearch:
+    uris: 'searchhrm-dfb3ad.es.us-east-1.aws.elastic.cloud:443'
+    api-key: 'SmJjS1Q1UUI0WHc1OFNmT1hFUzI6dWdLVFFuYUNTUnFFemRtUXQwYlVVZw=='
+
   data:
+    elasticsearch:
+      repositories:
+        enabled: true
     jpa:
       repositories:
         bootstrap-mode: deferred
+
   jpa:
     open-in-view: false
     properties:

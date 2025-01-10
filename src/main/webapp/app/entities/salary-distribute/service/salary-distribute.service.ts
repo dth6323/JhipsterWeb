@@ -35,17 +35,16 @@ export class SalaryDistributeService {
   protected applicationConfigService = inject(ApplicationConfigService);
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/salary-distributes');
-
-  caculate(startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, sdid: number): Observable<any> {
-    const payload = {
-      startDate: startDate.format('YYYY-MM-DD'),
-      endDate: endDate.format('YYYY-MM-DD'),
-      sdid: sdid,
-    };
-    return this.http
-      .post<RestSalaryDistribute>(`${this.resourceUrl}/pay`, payload, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
-  }
+  // caculate(startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, sdid: number): Observable<any> {
+  //   const payload = {
+  //     startDate: startDate.format('YYYY-MM-DD'),
+  //     endDate: endDate.format('YYYY-MM-DD'),
+  //     sdid: sdid,
+  //   };
+  //   return this.http
+  //     .post<RestSalaryDistribute>(`${this.resourceUrl}/pay`, payload, { observe: 'response' })
+  //     .pipe(map(res => this.convertResponseFromServer(res)));
+  // }
   showemployee(id?: string): Observable<SalaryDistribute[]> {
     return this.http.get<SalaryDistribute[]>(`${this.resourceUrl}/details?id=${id}`);
   }

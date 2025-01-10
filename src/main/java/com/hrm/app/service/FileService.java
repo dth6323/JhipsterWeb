@@ -1,6 +1,8 @@
 package com.hrm.app.service;
 
 import com.hrm.app.domain.MinioConfig;
+import com.hrm.app.domain.PdfDocument;
+import com.hrm.app.repository.PdfDocumentRepository;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
@@ -10,8 +12,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +25,9 @@ public class FileService {
 
     private final MinioConfig minioConfig;
     private final MinioClient minioClient;
+
+    @Autowired
+    private PdfDocumentRepository fileDocumentRepository;
 
     public FileService(MinioConfig minioConfig) {
         this.minioConfig = minioConfig;
@@ -30,27 +38,36 @@ public class FileService {
     }
 
     public String uploadFile(MultipartFile file) throws Exception {
-        String bucketName = minioConfig.getBucketName(); // Lấy tên bucket từ cấu hình
+        String bucketName = minioConfig.getBucketName();
 
-        // Kiểm tra bucket có tồn tại hay không
+        // Kiểm tra và tạo bucket nếu cần
         boolean isBucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         if (!isBucketExists) {
-            // Tạo bucket nếu chưa tồn tại
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         }
 
         // Tải file lên MinIO
+        String fileName = file.getOriginalFilename();
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket(bucketName)
-                .object(file.getOriginalFilename()) // Tên file
-                .stream(file.getInputStream(), file.getSize(), -1) // Dữ liệu
-                .contentType(file.getContentType()) // Loại file
+                .object(fileName)
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .contentType(file.getContentType())
                 .build()
         );
 
-        // Trả về URL của file
-        return minioConfig.getUrl() + "/" + bucketName + "/" + file.getOriginalFilename();
+        // Trích xuất nội dung từ file PDF và lưu vào Elasticsearch
+        String content = extractContentFromFile(file.getInputStream(), fileName);
+        if (content != null) {
+            PdfDocument fileDocument = new PdfDocument();
+            fileDocument.setId(fileName); // Sử dụng tên file làm ID
+            fileDocument.setFileName(fileName);
+            fileDocument.setContent(content);
+            fileDocumentRepository.save(fileDocument); // Lưu vào Elasticsearch
+        }
+
+        return minioConfig.getUrl() + "/" + bucketName + "/" + fileName;
     }
 
     // Đọc file từ MinIO
@@ -60,18 +77,22 @@ public class FileService {
         );
 
         if (fileName.endsWith(".docx") || fileName.endsWith(".doc")) {
-            return extractContentFromDocFile(inputStream, fileName);
+            return extractContentFromFile(inputStream, fileName);
         }
         return null;
     }
 
-    private String extractContentFromDocFile(InputStream inputStream, String fileName) throws IOException {
-        if (fileName.endsWith(".docx")) {
-            XWPFDocument docx = new XWPFDocument(inputStream);
-            XWPFWordExtractor extractor = new XWPFWordExtractor(docx);
-            return extractor.getText();
+    private String extractContentFromFile(InputStream inputStream, String fileName) throws IOException {
+        if (fileName.endsWith(".pdf")) {
+            return extractContentFromPdf(inputStream);
         }
         return null;
+    }
+
+    private String extractContentFromPdf(InputStream inputStream) throws IOException {
+        try (PDDocument document = PDDocument.load(inputStream)) {
+            return new PDFTextStripper().getText(document); // Trích xuất nội dung
+        }
     }
 
     // Tìm kiếm file theo nội dung
