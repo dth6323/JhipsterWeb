@@ -23,6 +23,12 @@ export class FilemanaService {
       observe: 'response',
     });
   }
+  searchFileWithHighlight(keyword: string): Observable<any> {
+    return this.http.get(`${this.resourceUrl}/searchWithHighlight`, {
+      params: { keyword },
+      observe: 'response',
+    });
+  }
   getFile(fileName: string): Observable<Blob> {
     const params = new HttpParams().set('filename', fileName); // Thêm fileName vào query params
     return this.http.get(`${this.resourceUrl}/readfiles`, {

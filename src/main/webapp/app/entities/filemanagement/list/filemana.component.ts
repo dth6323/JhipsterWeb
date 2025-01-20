@@ -6,7 +6,7 @@ import { FilemanaService } from '../service/filemana.service';
 import { combineLatest } from 'rxjs/internal/operators/combineLatest';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { IFileModel } from '../file.model';
 @Component({
   standalone: true,
   selector: 'jhi-file',
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class FileComponent implements OnInit {
   subscription: Subscription | null = null;
-  files?: any[];
+  files?: IFileModel[];
   isLoading = false;
   selectedFile: File | null = null;
   keyword = '';
@@ -32,6 +32,15 @@ export class FileComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => (this.isLoading = false),
+    });
+  }
+  searchFileWithHighLight(): void {
+    this.isLoading = true;
+    this.fileService.searchFileWithHighlight(this.keyword).subscribe({
+      next: data => {
+        this.files = data.body ?? [];
+        this.isLoading = false;
+      },
     });
   }
   onFileSelected(event: Event): void {

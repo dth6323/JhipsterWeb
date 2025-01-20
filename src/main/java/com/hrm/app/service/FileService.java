@@ -105,7 +105,7 @@ public class FileService {
         try {
             // Tạo highlight configuration
             Highlight highlight = new Highlight.Builder()
-                .fields("content", h -> h.preTags("<em>").postTags("</em>").numberOfFragments(3).fragmentSize(150))
+                .fields("content", h -> h.preTags("<mark>").postTags("</mark>").numberOfFragments(3).fragmentSize(150))
                 .build();
 
             // Build search request

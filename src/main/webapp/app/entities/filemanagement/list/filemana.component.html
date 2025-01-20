@@ -4,7 +4,7 @@
     <form class="input-group">
       <span class="input-group-text">Key word</span>
       <input type="text" name="search" class="form-control" placeholder="keyword" [(ngModel)]="keyword" />
-      <button class="btn btn-secondary" (click)="searchFile()">Search</button>
+      <button class="btn btn-secondary" (click)="searchFileWithHighLight()">Search</button>
     </form>
   </div>
 
@@ -19,9 +19,18 @@
 <h2>List file</h2>
 @if (files && files.length > 0) {
   <ul class="list-group">
-    @for (file of files; track file) {
+    @for (a of files; track a) {
       <li class="list-group-item">
-        {{ file }}
+        <div>
+          <strong>
+            {{ a.fileName }}
+          </strong>
+        </div>
+        <div class="border border-primary border-2 rounded">
+          @if (a.highlight) {
+            <div [innerHTML]="a.highlight"></div>
+          }
+        </div>
       </li>
     }
   </ul>
