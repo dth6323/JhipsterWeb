@@ -1,18 +1,10 @@
 package com.hrm.app.web.rest;
 
-import co.elastic.clients.elasticsearch.core.SearchResponse;
-import com.hrm.app.domain.PdfDocument;
 import com.hrm.app.service.FileService;
 import com.hrm.app.service.dto.SearchResultDTO;
-import io.minio.ListObjectsArgs;
-import io.minio.Result;
-import io.minio.messages.Item;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +16,6 @@ public class FileController {
 
     private final FileService fileService;
 
-    @Autowired
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }

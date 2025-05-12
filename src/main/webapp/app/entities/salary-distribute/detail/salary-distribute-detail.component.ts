@@ -5,13 +5,12 @@ import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
 import { ISalaryDistribute } from '../salary-distribute.model';
 import { SalaryDistributeService } from '../service/salary-distribute.service';
-import { Observer } from 'rxjs';
-import { EntityArrayResponseType } from '../../payroll/service/payroll.service';
 import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.directive';
 import { SortByDirective, SortDirective } from '../../../shared/sort';
 import { SalaryDistribute } from '../employee-detail.model';
 import { PayrollService } from '../../payroll/service/payroll.service';
 import { NewPayroll } from '../../payroll/payroll.model';
+
 @Component({
   standalone: true,
   selector: 'jhi-salary-distribute-detail',

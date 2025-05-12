@@ -51,7 +51,9 @@ relationship ManyToOne {
   Payroll to Wage,
   Payroll to SalaryDistribute
 }
-
+relationship OneToOne {
+  Employee to User with builtInEntity
+}
 
 // Sử dụng paginate cho từng entity
 paginate Department, Wage, SalaryDistribute, Employee, Contract, Attendance, Payroll with pagination

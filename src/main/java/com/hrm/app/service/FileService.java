@@ -103,23 +103,19 @@ public class FileService {
 
     public List<SearchResultDTO> searchDocuments(String searchTerm) throws IOException {
         try {
-            // Tạo highlight configuration
             Highlight highlight = new Highlight.Builder()
                 .fields("content", h -> h.preTags("<mark>").postTags("</mark>").numberOfFragments(3).fragmentSize(150))
                 .build();
 
-            // Build search request
             SearchRequest request = new SearchRequest.Builder()
                 .index("search-waws")
-                .query(q -> q.match(m -> m.field("content").query(searchTerm)))
+                .query(q -> q.matchPhrasePrefix(m -> m.field("content").query(searchTerm)))
                 .highlight(highlight)
                 .source(config -> config.filter(f -> f.includes("content", "fileName")))
                 .build();
 
-            // Thực hiện search
             SearchResponse<SearchResultDTO> response = elasticsearchClient.search(request, SearchResultDTO.class);
 
-            // Convert kết quả sang DTO
             List<SearchResultDTO> results = new ArrayList<>();
 
             for (Hit<SearchResultDTO> hit : response.hits().hits()) {
@@ -132,7 +128,6 @@ public class FileService {
                 }
                 results.add(dto);
             }
-
             return results;
         } catch (Exception e) {
             throw e;
@@ -162,18 +157,16 @@ public class FileService {
     //        return results;
     //    }
 
-    public List<Map<String, Object>> test(String keyword) {
-        List<Map<String, Object>> rawResults = fileDocumentRepository.findByContentWithHighlight(keyword);
-        return rawResults;
-    }
+    //public List<Map<String, Object>> test(String keyword) {
+    //List<Map<String, Object>> rawResults = fileDocumentRepository.findByContentWithHighlight(keyword);
+    //return rawResults;
+    //}
 
     public List<String> searchFilesByContent(String keyword) {
         List<String> matchingFiles = new ArrayList<>();
         try {
-            // Tìm kiếm trong Elasticsearch
             Iterable<PdfDocument> searchResults = fileDocumentRepository.findByContentContaining(keyword);
 
-            // Lấy danh sách tên file từ kết quả tìm kiếm
             for (PdfDocument document : searchResults) {
                 matchingFiles.add(document.getFileName());
             }

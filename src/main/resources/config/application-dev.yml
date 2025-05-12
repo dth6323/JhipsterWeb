@@ -51,8 +51,13 @@ spring:
   thymeleaf:
     cache: false
   elasticsearch:
-    uris: 'searchhrm-dfb3ad.es.us-east-1.aws.elastic.cloud:443'
-    api-key: 'SmJjS1Q1UUI0WHc1OFNmT1hFUzI6dWdLVFFuYUNTUnFFemRtUXQwYlVVZw=='
+    uris: https://localhost:9200
+    #    api-key: WkU1T3RKWUJqR0NhYlEtbHRRYVc6RHMzRTYyWnZOVTdtOVhJX29YX1M0QQ==
+    username: elastic
+    password: 123456
+    ssl-verification: false
+    connection-timeout: 5s
+    socket-timeout: 3s
   data:
     elasticsearch:
       repositories:

@@ -84,6 +84,12 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="user.id">
+              <div class="d-flex">
+                <span>User</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="department.id">
               <div class="d-flex">
                 <span>Department</span>
@@ -111,6 +117,9 @@
               <td>{{ employee.address }}</td>
               <td>{{ employee.gender }}</td>
               <td>{{ employee.dateOfBirth | formatMediumDate }}</td>
+              <td>
+                {{ employee.user?.id }}
+              </td>
               <td>
                 @if (employee.department) {
                   <div>

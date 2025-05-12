@@ -27,8 +27,8 @@ management:
 
 spring:
   elasticsearch:
-    uris: 'searchhrm-dfb3ad.es.us-east-1.aws.elastic.cloud:443'
-    api-key: 'SmJjS1Q1UUI0WHc1OFNmT1hFUzI6dWdLVFFuYUNTUnFFemRtUXQwYlVVZw=='
+    repositories:
+      enabled: false
   data:
     elasticsearch:
       repositories:
