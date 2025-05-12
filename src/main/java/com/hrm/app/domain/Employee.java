@@ -52,6 +52,10 @@ public class Employee implements Serializable {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "employees" }, allowSetters = true)
     private Department department;
@@ -163,6 +167,19 @@ public class Employee implements Serializable {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Employee user(User user) {
+        this.setUser(user);
+        return this;
     }
 
     public Department getDepartment() {

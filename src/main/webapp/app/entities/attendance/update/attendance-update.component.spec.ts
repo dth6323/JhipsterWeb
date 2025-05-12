@@ -49,10 +49,10 @@ describe('Attendance Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Employee query and add missing value', () => {
       const attendance: IAttendance = { id: 456 };
-      const employee: IEmployee = { id: 10762 };
+      const employee: IEmployee = { id: 22524 };
       attendance.employee = employee;
 
-      const employeeCollection: IEmployee[] = [{ id: 28518 }];
+      const employeeCollection: IEmployee[] = [{ id: 17258 }];
       jest.spyOn(employeeService, 'query').mockReturnValue(of(new HttpResponse({ body: employeeCollection })));
       const additionalEmployees = [employee];
       const expectedCollection: IEmployee[] = [...additionalEmployees, ...employeeCollection];
@@ -71,7 +71,7 @@ describe('Attendance Management Update Component', () => {
 
     it('Should update editForm', () => {
       const attendance: IAttendance = { id: 456 };
-      const employee: IEmployee = { id: 15267 };
+      const employee: IEmployee = { id: 16043 };
       attendance.employee = employee;
 
       activatedRoute.data = of({ attendance });

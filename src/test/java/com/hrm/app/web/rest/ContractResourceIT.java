@@ -316,7 +316,7 @@ class ContractResourceIT {
         Contract partialUpdatedContract = new Contract();
         partialUpdatedContract.setId(contract.getId());
 
-        partialUpdatedContract.endDate(UPDATED_END_DATE).status(UPDATED_STATUS);
+        partialUpdatedContract.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE).status(UPDATED_STATUS);
 
         restContractMockMvc
             .perform(

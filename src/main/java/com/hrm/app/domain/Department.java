@@ -34,7 +34,10 @@ public class Department implements Serializable {
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
-    @JsonIgnoreProperties(value = { "department", "contract", "attendances", "payrolls", "totalAttendSalaries" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "user", "department", "contract", "attendances", "payrolls", "totalAttendSalaries" },
+        allowSetters = true
+    )
     private Set<Employee> employees = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrm.app.IntegrationTest;
 import com.hrm.app.domain.Employee;
 import com.hrm.app.repository.EmployeeRepository;
+import com.hrm.app.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -63,6 +64,9 @@ class EmployeeResourceIT {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private EntityManager em;
@@ -396,8 +400,6 @@ class EmployeeResourceIT {
         // Update the employee using partial update
         Employee partialUpdatedEmployee = new Employee();
         partialUpdatedEmployee.setId(employee.getId());
-
-        partialUpdatedEmployee.phone(UPDATED_PHONE).email(UPDATED_EMAIL);
 
         restEmployeeMockMvc
             .perform(

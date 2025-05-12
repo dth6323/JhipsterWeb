@@ -3,42 +3,42 @@ import dayjs from 'dayjs/esm';
 import { IEmployee, NewEmployee } from './employee.model';
 
 export const sampleWithRequiredData: IEmployee = {
-  id: 20859,
-  name: 'electronics',
-  phone: '942-389-2008 x89121',
-  email: 'Delta_West87@gmail.com',
-  address: 'past',
-  gender: 12800,
+  id: 13808,
+  name: 'as',
+  phone: '(471) 436-4903',
+  email: 'Cora.Schaefer94@hotmail.com',
+  address: 'brr',
+  gender: 2948,
   dateOfBirth: dayjs('2024-10-07'),
 };
 
 export const sampleWithPartialData: IEmployee = {
-  id: 18199,
-  name: 'onto wildly focalise',
-  phone: '(841) 906-3127 x316',
-  email: 'Vance81@yahoo.com',
-  address: 'these',
-  gender: 7805,
+  id: 1708,
+  name: 'huzzah gradient velvety',
+  phone: '238-832-3863 x9999',
+  email: 'Herminio72@hotmail.com',
+  address: 'gulp now the',
+  gender: 13101,
   dateOfBirth: dayjs('2024-10-07'),
 };
 
 export const sampleWithFullData: IEmployee = {
-  id: 7376,
-  name: 'irritably irk never',
-  phone: '204-470-8439 x818',
-  email: 'Hugh.Brekke@gmail.com',
-  address: 'markup atop splay',
-  gender: 24627,
+  id: 9031,
+  name: 'outlaw',
+  phone: '342.261.7707 x652',
+  email: 'Keaton_Mosciski17@gmail.com',
+  address: 'plugin',
+  gender: 28987,
   dateOfBirth: dayjs('2024-10-07'),
 };
 
 export const sampleWithNewData: NewEmployee = {
-  name: 'finally',
-  phone: '1-553-712-4927 x973',
-  email: 'Lazaro3@yahoo.com',
-  address: 'agitated hype disposer',
-  gender: 29516,
-  dateOfBirth: dayjs('2024-10-08'),
+  name: 'though',
+  phone: '452-223-0968 x6932',
+  email: 'Wilma_Rowe@gmail.com',
+  address: 'flint after government',
+  gender: 30164,
+  dateOfBirth: dayjs('2024-10-07'),
   id: null,
 };
 

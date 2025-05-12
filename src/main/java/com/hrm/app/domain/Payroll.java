@@ -30,7 +30,10 @@ public class Payroll implements Serializable {
     private Integer workDay;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "department", "contract", "attendances", "payrolls", "totalAttendSalaries" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "user", "department", "contract", "attendances", "payrolls", "totalAttendSalaries" },
+        allowSetters = true
+    )
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)

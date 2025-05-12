@@ -351,7 +351,11 @@ class AttendanceResourceIT {
         Attendance partialUpdatedAttendance = new Attendance();
         partialUpdatedAttendance.setId(attendance.getId());
 
-        partialUpdatedAttendance.checkOutTime(UPDATED_CHECK_OUT_TIME).workHour(UPDATED_WORK_HOUR);
+        partialUpdatedAttendance
+            .dateOfwork(UPDATED_DATE_OFWORK)
+            .checkInTime(UPDATED_CHECK_IN_TIME)
+            .checkOutTime(UPDATED_CHECK_OUT_TIME)
+            .workHour(UPDATED_WORK_HOUR);
 
         restAttendanceMockMvc
             .perform(

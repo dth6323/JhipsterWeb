@@ -1,4 +1,5 @@
 import dayjs from 'dayjs/esm';
+import { IUser } from 'app/entities/user/user.model';
 import { IDepartment } from 'app/entities/department/department.model';
 import { IContract } from 'app/entities/contract/contract.model';
 
@@ -10,6 +11,7 @@ export interface IEmployee {
   address?: string | null;
   gender?: number | null;
   dateOfBirth?: dayjs.Dayjs | null;
+  user?: Pick<IUser, 'id'> | null;
   department?: IDepartment | null;
   contract?: IContract | null;
 }

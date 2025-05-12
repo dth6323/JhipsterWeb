@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/service/user.service';
 import { IDepartment } from 'app/entities/department/department.model';
 import { DepartmentService } from 'app/entities/department/service/department.service';
 import { IContract } from 'app/entities/contract/contract.model';
@@ -20,6 +22,7 @@ describe('Employee Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let employeeFormService: EmployeeFormService;
   let employeeService: EmployeeService;
+  let userService: UserService;
   let departmentService: DepartmentService;
   let contractService: ContractService;
 
@@ -44,6 +47,7 @@ describe('Employee Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     employeeFormService = TestBed.inject(EmployeeFormService);
     employeeService = TestBed.inject(EmployeeService);
+    userService = TestBed.inject(UserService);
     departmentService = TestBed.inject(DepartmentService);
     contractService = TestBed.inject(ContractService);
 
@@ -51,12 +55,34 @@ describe('Employee Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('Should call User query and add missing value', () => {
+      const employee: IEmployee = { id: 456 };
+      const user: IUser = { id: 18596 };
+      employee.user = user;
+
+      const userCollection: IUser[] = [{ id: 2549 }];
+      jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
+      const additionalUsers = [user];
+      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
+      jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ employee });
+      comp.ngOnInit();
+
+      expect(userService.query).toHaveBeenCalled();
+      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
+        userCollection,
+        ...additionalUsers.map(expect.objectContaining),
+      );
+      expect(comp.usersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Department query and add missing value', () => {
       const employee: IEmployee = { id: 456 };
-      const department: IDepartment = { id: 27319 };
+      const department: IDepartment = { id: 7094 };
       employee.department = department;
 
-      const departmentCollection: IDepartment[] = [{ id: 8252 }];
+      const departmentCollection: IDepartment[] = [{ id: 18809 }];
       jest.spyOn(departmentService, 'query').mockReturnValue(of(new HttpResponse({ body: departmentCollection })));
       const additionalDepartments = [department];
       const expectedCollection: IDepartment[] = [...additionalDepartments, ...departmentCollection];
@@ -75,10 +101,10 @@ describe('Employee Management Update Component', () => {
 
     it('Should call Contract query and add missing value', () => {
       const employee: IEmployee = { id: 456 };
-      const contract: IContract = { id: 30847 };
+      const contract: IContract = { id: 32715 };
       employee.contract = contract;
 
-      const contractCollection: IContract[] = [{ id: 18718 }];
+      const contractCollection: IContract[] = [{ id: 25997 }];
       jest.spyOn(contractService, 'query').mockReturnValue(of(new HttpResponse({ body: contractCollection })));
       const additionalContracts = [contract];
       const expectedCollection: IContract[] = [...additionalContracts, ...contractCollection];
@@ -97,14 +123,17 @@ describe('Employee Management Update Component', () => {
 
     it('Should update editForm', () => {
       const employee: IEmployee = { id: 456 };
-      const department: IDepartment = { id: 1490 };
+      const user: IUser = { id: 30378 };
+      employee.user = user;
+      const department: IDepartment = { id: 4949 };
       employee.department = department;
-      const contract: IContract = { id: 29555 };
+      const contract: IContract = { id: 14061 };
       employee.contract = contract;
 
       activatedRoute.data = of({ employee });
       comp.ngOnInit();
 
+      expect(comp.usersSharedCollection).toContain(user);
       expect(comp.departmentsSharedCollection).toContain(department);
       expect(comp.contractsSharedCollection).toContain(contract);
       expect(comp.employee).toEqual(employee);
@@ -180,6 +209,16 @@ describe('Employee Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareUser', () => {
+      it('Should forward to userService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(userService, 'compareUser');
+        comp.compareUser(entity, entity2);
+        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareDepartment', () => {
       it('Should forward to departmentService', () => {
         const entity = { id: 123 };

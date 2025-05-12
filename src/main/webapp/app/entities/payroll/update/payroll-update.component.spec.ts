@@ -57,10 +57,10 @@ describe('Payroll Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Employee query and add missing value', () => {
       const payroll: IPayroll = { id: 456 };
-      const employee: IEmployee = { id: 30768 };
+      const employee: IEmployee = { id: 22208 };
       payroll.employee = employee;
 
-      const employeeCollection: IEmployee[] = [{ id: 24800 }];
+      const employeeCollection: IEmployee[] = [{ id: 24317 }];
       jest.spyOn(employeeService, 'query').mockReturnValue(of(new HttpResponse({ body: employeeCollection })));
       const additionalEmployees = [employee];
       const expectedCollection: IEmployee[] = [...additionalEmployees, ...employeeCollection];
@@ -79,10 +79,10 @@ describe('Payroll Management Update Component', () => {
 
     it('Should call Wage query and add missing value', () => {
       const payroll: IPayroll = { id: 456 };
-      const wage: IWage = { id: 5602 };
+      const wage: IWage = { id: 13439 };
       payroll.wage = wage;
 
-      const wageCollection: IWage[] = [{ id: 13956 }];
+      const wageCollection: IWage[] = [{ id: 19140 }];
       jest.spyOn(wageService, 'query').mockReturnValue(of(new HttpResponse({ body: wageCollection })));
       const additionalWages = [wage];
       const expectedCollection: IWage[] = [...additionalWages, ...wageCollection];
@@ -101,10 +101,10 @@ describe('Payroll Management Update Component', () => {
 
     it('Should call SalaryDistribute query and add missing value', () => {
       const payroll: IPayroll = { id: 456 };
-      const salaryDistribute: ISalaryDistribute = { id: 26246 };
+      const salaryDistribute: ISalaryDistribute = { id: 21202 };
       payroll.salaryDistribute = salaryDistribute;
 
-      const salaryDistributeCollection: ISalaryDistribute[] = [{ id: 6692 }];
+      const salaryDistributeCollection: ISalaryDistribute[] = [{ id: 32304 }];
       jest.spyOn(salaryDistributeService, 'query').mockReturnValue(of(new HttpResponse({ body: salaryDistributeCollection })));
       const additionalSalaryDistributes = [salaryDistribute];
       const expectedCollection: ISalaryDistribute[] = [...additionalSalaryDistributes, ...salaryDistributeCollection];
@@ -123,11 +123,11 @@ describe('Payroll Management Update Component', () => {
 
     it('Should update editForm', () => {
       const payroll: IPayroll = { id: 456 };
-      const employee: IEmployee = { id: 13452 };
+      const employee: IEmployee = { id: 1880 };
       payroll.employee = employee;
-      const wage: IWage = { id: 15044 };
+      const wage: IWage = { id: 26398 };
       payroll.wage = wage;
-      const salaryDistribute: ISalaryDistribute = { id: 9233 };
+      const salaryDistribute: ISalaryDistribute = { id: 23407 };
       payroll.salaryDistribute = salaryDistribute;
 
       activatedRoute.data = of({ payroll });

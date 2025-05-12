@@ -351,7 +351,7 @@ class SalaryDistributeResourceIT {
         SalaryDistribute partialUpdatedSalaryDistribute = new SalaryDistribute();
         partialUpdatedSalaryDistribute.setId(salaryDistribute.getId());
 
-        partialUpdatedSalaryDistribute.endDate(UPDATED_END_DATE);
+        partialUpdatedSalaryDistribute.startDate(UPDATED_START_DATE);
 
         restSalaryDistributeMockMvc
             .perform(

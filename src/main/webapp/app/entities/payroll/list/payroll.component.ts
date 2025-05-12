@@ -15,7 +15,6 @@ import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigati
 import { IPayroll } from '../payroll.model';
 import { EntityArrayResponseType, PayrollService } from '../service/payroll.service';
 import { PayrollDeleteDialogComponent } from '../delete/payroll-delete-dialog.component';
-import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.directive';
 
 @Component({
   standalone: true,
@@ -31,7 +30,6 @@ import HasAnyAuthorityDirective from '../../../shared/auth/has-any-authority.dir
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ItemCountComponent,
-    HasAnyAuthorityDirective,
   ],
 })
 export class PayrollComponent implements OnInit {

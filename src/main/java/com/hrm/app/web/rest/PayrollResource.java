@@ -2,30 +2,23 @@ package com.hrm.app.web.rest;
 
 import com.hrm.app.domain.Payroll;
 import com.hrm.app.repository.PayrollRepository;
-import com.hrm.app.service.MinioService;
-import com.hrm.app.service.PayrollService;
-import com.hrm.app.service.dto.EmployeeAttendDTO;
 import com.hrm.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -46,18 +39,19 @@ public class PayrollResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    @Autowired
-    private MinioService minioService;
-
     private final PayrollRepository payrollRepository;
 
-    private final PayrollService payrollService;
-
-    public PayrollResource(PayrollRepository payrollRepository, PayrollService payrollService) {
+    public PayrollResource(PayrollRepository payrollRepository) {
         this.payrollRepository = payrollRepository;
-        this.payrollService = payrollService;
     }
 
+    /**
+     * {@code POST  /payrolls} : Create a new payroll.
+     *
+     * @param payroll the payroll to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new payroll, or with status {@code 400 (Bad Request)} if the payroll has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PostMapping("")
     public ResponseEntity<Payroll> createPayroll(@Valid @RequestBody Payroll payroll) throws URISyntaxException {
         LOG.debug("REST request to save Payroll : {}", payroll);
@@ -103,6 +97,17 @@ public class PayrollResource {
             .body(payroll);
     }
 
+    /**
+     * {@code PATCH  /payrolls/:id} : Partial updates given fields of an existing payroll, field will ignore if it is null
+     *
+     * @param id the id of the payroll to save.
+     * @param payroll the payroll to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated payroll,
+     * or with status {@code 400 (Bad Request)} if the payroll is not valid,
+     * or with status {@code 404 (Not Found)} if the payroll is not found,
+     * or with status {@code 500 (Internal Server Error)} if the payroll couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Payroll> partialUpdatePayroll(
         @PathVariable(value = "id", required = false) final Long id,
@@ -180,26 +185,5 @@ public class PayrollResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @GetMapping("/attendance-report")
-    public List<EmployeeAttendDTO> getAttendanceReport(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ) {
-        if (startDate == null || endDate == null) {
-            return null;
-        }
-        return payrollService.getEmployeeSalaryAndAttendance(startDate, endDate);
-    }
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            String message = minioService.uploadFile(file.getOriginalFilename(), file.getInputStream(), file.getContentType());
-            return ResponseEntity.ok(message);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
-        }
     }
 }

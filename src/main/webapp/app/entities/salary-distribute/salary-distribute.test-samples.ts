@@ -3,34 +3,34 @@ import dayjs from 'dayjs/esm';
 import { ISalaryDistribute, NewSalaryDistribute } from './salary-distribute.model';
 
 export const sampleWithRequiredData: ISalaryDistribute = {
-  id: 9948,
-  startDate: dayjs('2024-10-08'),
-  endDate: dayjs('2024-10-07'),
-  workDay: 17758,
-  typeOfSalary: 'legislature',
+  id: 31357,
+  startDate: dayjs('2024-10-07'),
+  endDate: dayjs('2024-10-08'),
+  workDay: 30838,
+  typeOfSalary: 'yet',
 };
 
 export const sampleWithPartialData: ISalaryDistribute = {
-  id: 28134,
+  id: 25177,
   startDate: dayjs('2024-10-07'),
   endDate: dayjs('2024-10-07'),
-  workDay: 18447,
-  typeOfSalary: 'strait midst sustenance',
+  workDay: 24060,
+  typeOfSalary: 'ew near',
 };
 
 export const sampleWithFullData: ISalaryDistribute = {
-  id: 32630,
-  startDate: dayjs('2024-10-08'),
+  id: 14417,
+  startDate: dayjs('2024-10-07'),
   endDate: dayjs('2024-10-07'),
-  workDay: 31943,
-  typeOfSalary: 'afore',
+  workDay: 3255,
+  typeOfSalary: 'for rudely',
 };
 
 export const sampleWithNewData: NewSalaryDistribute = {
-  startDate: dayjs('2024-10-07'),
-  endDate: dayjs('2024-10-08'),
-  workDay: 2422,
-  typeOfSalary: 'which regarding er',
+  startDate: dayjs('2024-10-08'),
+  endDate: dayjs('2024-10-07'),
+  workDay: 2995,
+  typeOfSalary: 'grubby fledgling legend',
   id: null,
 };
 

@@ -38,7 +38,10 @@ public class Contract implements Serializable {
     private String status;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract")
-    @JsonIgnoreProperties(value = { "department", "contract", "attendances", "payrolls", "totalAttendSalaries" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "user", "department", "contract", "attendances", "payrolls", "totalAttendSalaries" },
+        allowSetters = true
+    )
     private Set<Employee> employees = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -17,7 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.*;
-
 import org.hibernate.mapping.Any;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,13 @@ public class SalaryDistributeResource {
     private final PayrollRepository payrollRepository;
     private final EmployeeRepository employeeRepository;
 
-    public SalaryDistributeResource(SalaryDistributeRepository salaryDistributeRepository, SalaryDistributeMapper salaryDistributeMapper, AttendanceRepository attendanceRepository, PayrollRepository payrollRepository, EmployeeRepository employeeRepository) {
+    public SalaryDistributeResource(
+        SalaryDistributeRepository salaryDistributeRepository,
+        SalaryDistributeMapper salaryDistributeMapper,
+        AttendanceRepository attendanceRepository,
+        PayrollRepository payrollRepository,
+        EmployeeRepository employeeRepository
+    ) {
         this.salaryDistributeRepository = salaryDistributeRepository;
         this.salaryDistributeMapper = salaryDistributeMapper;
         this.attendanceRepository = attendanceRepository;
@@ -66,10 +71,11 @@ public class SalaryDistributeResource {
     public ResponseEntity<?> calculate(
         @RequestParam("startDate") LocalDate startDate,
         @RequestParam("endDate") LocalDate endDate,
-        @RequestParam("sdid") String id) {
+        @RequestParam("sdid") String id
+    ) {
         Long ss = Long.parseLong(id);
         try {
-            List<Attendance> att = this.attendanceRepository.findByDateOfworkBetween(startDate,endDate);
+            List<Attendance> att = this.attendanceRepository.findByDateOfworkBetween(startDate, endDate);
             Map<Long, Integer> map = new HashMap<>();
             List<Payroll> payrolls = new ArrayList<>();
 
@@ -93,37 +99,34 @@ public class SalaryDistributeResource {
 
             // Trả về danh sách payroll đã tạo
             return ResponseEntity.ok(payrolls);
-
         } catch (NumberFormatException ex) {
             // Xử lý ngoại lệ nếu `id` không hợp lệ
-            return ResponseEntity.badRequest()
-                .body("Invalid 'sdid' parameter. It must be a valid number.");
+            return ResponseEntity.badRequest().body("Invalid 'sdid' parameter. It must be a valid number.");
         }
     }
 
-
-//    @GetMapping("/t2pay")
-//    public List<Attendance> t2calculate(@RequestParam("date") LocalDate date) {
-//        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
-//        Map<Long, Integer> map1 = new HashMap<>();
-//        for (Attendance attendance : att) {
-//            Long employeeId = attendance.getEmployee().getId();
-//
-//            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
-//        }
-//        return att;
-//    }
-//    @GetMapping("/tpay")
-//    public Map<Long, Integer> tcalculate(@RequestParam("date") LocalDate date) {
-//        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
-//        Map<Long, Integer> map1 = new HashMap<>();
-//        for (Attendance attendance : att) {
-//            Long employeeId = attendance.getEmployee().getId();
-//
-//            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
-//        }
-//        return map1;
-//    }
+    //    @GetMapping("/t2pay")
+    //    public List<Attendance> t2calculate(@RequestParam("date") LocalDate date) {
+    //        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
+    //        Map<Long, Integer> map1 = new HashMap<>();
+    //        for (Attendance attendance : att) {
+    //            Long employeeId = attendance.getEmployee().getId();
+    //
+    //            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
+    //        }
+    //        return att;
+    //    }
+    //    @GetMapping("/tpay")
+    //    public Map<Long, Integer> tcalculate(@RequestParam("date") LocalDate date) {
+    //        List<Attendance> att = this.attendanceRepository.findByDateOfwork(date);
+    //        Map<Long, Integer> map1 = new HashMap<>();
+    //        for (Attendance attendance : att) {
+    //            Long employeeId = attendance.getEmployee().getId();
+    //
+    //            map1.put(employeeId, map1.getOrDefault(employeeId, 0) + 1);
+    //        }
+    //        return map1;
+    //    }
     @PostMapping("")
     public ResponseEntity<SalaryDistribute> createSalaryDistribute(@Valid @RequestBody SalaryDistribute salaryDistribute)
         throws URISyntaxException {
@@ -137,6 +140,16 @@ public class SalaryDistributeResource {
             .body(salaryDistribute);
     }
 
+    /**
+     * {@code PUT  /salary-distributes/:id} : Updates an existing salaryDistribute.
+     *
+     * @param id the id of the salaryDistribute to save.
+     * @param salaryDistribute the salaryDistribute to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated salaryDistribute,
+     * or with status {@code 400 (Bad Request)} if the salaryDistribute is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the salaryDistribute couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<SalaryDistribute> updateSalaryDistribute(
         @PathVariable(value = "id", required = false) final Long id,
@@ -230,6 +243,12 @@ public class SalaryDistributeResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    /**
+     * {@code GET  /salary-distributes/:id} : get the "id" salaryDistribute.
+     *
+     * @param id the id of the salaryDistribute to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the salaryDistribute, or with status {@code 404 (Not Found)}.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<SalaryDistribute> getSalaryDistribute(@PathVariable("id") Long id) {
         LOG.debug("REST request to get SalaryDistribute : {}", id);
@@ -237,6 +256,12 @@ public class SalaryDistributeResource {
         return ResponseUtil.wrapOrNotFound(salaryDistribute);
     }
 
+    /**
+     * {@code DELETE  /salary-distributes/:id} : delete the "id" salaryDistribute.
+     *
+     * @param id the id of the salaryDistribute to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSalaryDistribute(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete SalaryDistribute : {}", id);
@@ -244,11 +269,5 @@ public class SalaryDistributeResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @GetMapping("/details")
-    public ResponseEntity<List<SalaryDistributeDTO>> getDetails(@RequestParam("id") String id) {
-        List<Object[]> details = salaryDistributeRepository.findDetails(id);
-        return ResponseEntity.ok(salaryDistributeMapper.toDtoList(details));
     }
 }
